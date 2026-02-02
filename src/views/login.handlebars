@@ -1,0 +1,44 @@
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+    <h2>Iniciar Sesión</h2>
+    <form id="loginForm">
+        <div style="margin-bottom: 15px;">
+            <label>Email:</label>
+            <input type="email" name="email" id="email" required style="width: 100%; padding: 8px;">
+        </div>
+        <div style="margin-bottom: 15px;">
+            <label>Contraseña:</label>
+            <input type="password" name="password" id="password" required style="width: 100%; padding: 8px;">
+        </div>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #007bff; color: white; border: none; cursor: pointer;">Ingresar</button>
+    </form>
+    
+    <div style="margin-top: 15px; text-align: center;">
+        <p>¿No tienes cuenta? <a href="/register">Regístrate aquí</a></p>
+        <p><a href="/forgot-password" style="color: #dc3545;">Olvidé mi contraseña</a></p>
+    </div>
+</div>
+
+<script>
+    const form = document.getElementById('loginForm');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const obj = {};
+        data.forEach((value, key) => obj[key] = value);
+
+        fetch('/api/sessions/login', {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(result => {
+            if (result.status === 200) {
+                window.location.replace('/products'); // Redirige a productos si el login es exitoso
+            } else {
+                alert('Credenciales incorrectas');
+            }
+        });
+    });
+</script>

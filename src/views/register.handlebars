@@ -1,0 +1,54 @@
+<div style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+    <h2>Registro de Usuario</h2>
+    <form id="registerForm">
+        <div style="margin-bottom: 10px;">
+            <label>Nombre:</label>
+            <input type="text" name="first_name" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Apellido:</label>
+            <input type="text" name="last_name" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Email:</label>
+            <input type="email" name="email" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Edad:</label>
+            <input type="number" name="age" required style="width: 100%;">
+        </div>
+        <div style="margin-bottom: 10px;">
+            <label>Contraseña:</label>
+            <input type="password" name="password" required style="width: 100%;">
+        </div>
+        <button type="submit" style="width: 100%; padding: 10px; background-color: #28a745; color: white; border: none; cursor: pointer;">Registrarse</button>
+    </form>
+    <p style="text-align: center;"><a href="/login">Ya tengo cuenta</a></p>
+</div>
+
+<script>
+    const form = document.getElementById('registerForm');
+
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        const data = new FormData(form);
+        const obj = {};
+        data.forEach((value, key) => obj[key] = value);
+
+        fetch('/api/users/register', {
+            method: 'POST',
+            body: JSON.stringify(obj),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(result => result.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Usuario registrado exitosamente');
+                window.location.replace('/login');
+            } else {
+                alert(data.error);
+            }
+        });
+    });
+</script>

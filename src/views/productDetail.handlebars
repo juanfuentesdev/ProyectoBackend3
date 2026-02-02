@@ -1,0 +1,33 @@
+<h1>Detalle del Producto</h1>
+
+{{#if product}}
+    <article>
+        <h2>{{product.title}}</h2>
+        <p><strong>Descripción:</strong> {{product.description}}</p>
+        <p><strong>Precio:</strong> ${{product.price}}</p>
+        <p><strong>Categoría:</strong> {{product.category}}</p>
+        <p><strong>Stock disponible:</strong> {{product.stock}}</p>
+        
+        <button onclick="addToCart('68c2501fd2c73a796ab1c1d3', '{{product._id}}')">Agregar al Carrito</button>
+    </article>
+{{else}}
+    <p>El producto no fue encontrado.</p>
+{{/if}}
+<br>
+<a href="/products">Volver a la lista de productos</a>
+
+<script>
+    function addToCart(cartId, productId) {
+        fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.ok) {
+                alert('¡Producto agregado al carrito!');
+            } else {
+                alert('Error al agregar el producto.');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+</script>

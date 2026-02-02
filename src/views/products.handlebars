@@ -1,0 +1,57 @@
+<h1>Productos</h1>
+
+<a href="/carts/68c2501fd2c73a796ab1c1d3" style="display: block; margin-bottom: 20px; font-weight: bold;">
+    Ver Mi Carrito
+</a>
+
+<div>
+    {{#each products.docs}}
+        <article>
+            <h3>{{this.title}}</h3>
+            <p>Precio: ${{this.price}}</p>
+            <a href="/products/{{this._id}}">Ver Detalles</a>
+            <button onclick="addToCart('68c2501fd2c73a796ab1c1d3', '{{this._id}}')">Agregar al Carrito</button>
+        </article>
+        <hr>
+    {{/each}}
+</div>
+
+<div style="margin-bottom: 30px;">
+    {{#if products.hasPrevPage}}
+        <a href="/products?page={{products.prevPage}}&limit={{products.limit}}">Página Anterior</a>
+    {{/if}}
+    <span>Página {{products.page}} de {{products.totalPages}}</span>
+    {{#if products.hasNextPage}}
+        <a href="/products?page={{products.nextPage}}&limit={{products.limit}}">Página Siguiente</a>
+    {{/if}}
+</div>
+
+<hr>
+
+<div style="margin-top: 20px; padding-bottom: 20px;">
+    <button onclick="logout()" style="background-color: #dc3545; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer;">
+        Cerrar Sesión
+    </button>
+</div>
+
+<script>
+    function addToCart(cartId, productId) {
+        fetch(`/api/carts/${cartId}/products/${productId}`, {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => alert('Producto agregado al carrito!'))
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Función de Logout
+    function logout() {
+        fetch('/api/sessions/logout', {
+            method: 'POST'
+        }).then(result => {
+            if (result.status === 200) {
+                window.location.replace('/login');
+            }
+        });
+    }
+</script>

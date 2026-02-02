@@ -1,0 +1,97 @@
+<h1>Contenido del Carrito</h1>
+
+{{#if cart.products.length}}
+    <button onclick="clearCart('{{cart._id}}')" style="background-color: #dc3545; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 20px;">
+        Vaciar Carrito
+    </button>
+
+    <ul>
+        {{#each cart.products}}
+            <li>
+                <h4>{{this.product.title}}</h4>
+                <p>Precio unitario: ${{this.product.price}}</p>
+                
+                <div>
+                    <span>Cantidad: </span>
+                    <button onclick="updateQuantity('{{../cart._id}}', '{{this.product._id}}', {{this.quantity}} - 1)">-</button>
+                    <strong>{{this.quantity}}</strong>
+                    <button onclick="updateQuantity('{{../cart._id}}', '{{this.product._id}}', {{this.quantity}} + 1)">+</button>
+                </div>
+
+            </li>
+            <hr>
+        {{/each}}
+    </ul>
+
+    <div style="margin-top: 20px; margin-bottom: 20px;">
+        <button onclick="purchaseCart('{{cart._id}}')" style="background-color: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold;">
+            Finalizar Compra
+        </button>
+    </div>
+
+{{else}}
+    <p>El carrito está vacío.</p>
+{{/if}}
+
+<a href="/products">Seguir comprando</a>
+
+<script>
+
+    function updateQuantity(cartId, productId, newQuantity) {
+        if (newQuantity < 1) {
+            fetch(`/api/carts/${cartId}/products/${productId}`, { method: 'DELETE' })
+                .then(res => res.ok ? window.location.reload() : alert('Error al eliminar producto.'));
+        } else {
+            fetch(`/api/carts/${cartId}/products/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ quantity: newQuantity }),
+            })
+            .then(res => res.ok ? window.location.reload() : alert('Error al actualizar cantidad.'));
+        }
+    }
+
+
+    function clearCart(cartId) {
+        if (confirm('¿Estás seguro de que quieres vaciar el carrito?')) {
+            fetch(`/api/carts/${cartId}`, {
+                method: 'DELETE',
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('El carrito ha sido vaciado.');
+                    window.location.reload();
+                } else {
+                    alert('Error al vaciar el carrito.');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    }
+
+
+    function purchaseCart(cartId) {
+        if(!confirm('¿Deseas finalizar tu compra ahora?')) return;
+
+        fetch(`/api/carts/${cartId}/purchase`, {
+            method: 'POST'
+        })
+        .then(res => res.json())
+        .then(data => {
+            if(data.status === 'success') {
+
+                alert(`¡Compra exitosa!\n\nTicket: ${data.ticket.code}\nMonto Total: $${data.ticket.amount}\nComprador: ${data.ticket.purchaser}`);
+                
+
+                if(data.not_purchased && data.not_purchased.length > 0) {
+                    alert('Nota: Algunos productos no tenían stock suficiente y quedaron en el carrito.');
+                }
+                
+                window.location.reload();
+            } else {
+                alert('Error al procesar la compra: ' + (data.message || data.error));
+            }
+        })
+        .catch(err => console.error('Error:', err));
+    }
+</script>

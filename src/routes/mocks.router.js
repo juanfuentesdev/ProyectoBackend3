@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { generateMockUsers, generateMockPets } from '../utils/mocking.js';
 import { UserModel } from '../models/User.model.js';
-import { petModel } from '../models/pet.model.js';   
+import { PetModel } from '../models/Pet.model.js';   
 
 const router = Router();
 
@@ -27,7 +27,7 @@ router.post('/generateData', async (req, res) => {
 
 
         await UserModel.insertMany(mockUsers);
-        await petModel.insertMany(mockPets);
+        await PetModel.insertMany(mockPets);
 
         req.logger.info(`Generados e insertados: ${users} usuarios y ${pets} mascotas.`);
         res.send({ status: "success", message: "Datos insertados en DB exitosamente" });

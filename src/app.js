@@ -19,6 +19,11 @@ import viewsRouter from './routes/views.router.js';
 import usersRouter from './routes/users.router.js'; 
 import sessionsRouter from './routes/sessions.router.js'; 
 
+import adoptionRouter from './routes/adoption.router.js';
+import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from 'swagger-ui-express';
+
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -70,3 +75,18 @@ io.on('connection', (socket) => {
     });
 });
 
+app.use('/api/adoptions', adoptionRouter);
+
+const swaggerOptions = {
+    definition: {
+        openapi: '3.0.1',
+        info: {
+            title: 'Documentación K Tienda / Adoptme',
+            description: 'API principal del proyecto'
+        }
+    },
+    apis: [`./src/docs/**/*.yaml`] 
+};
+
+const specs = swaggerJSDoc(swaggerOptions);
+app.use('/apidocs', swaggerUiExpress.serve, swaggerUiExpress.setup(specs));

@@ -75,6 +75,8 @@
     "side-channel": "^1.0.6",
     "socket.io": "^4.8.1",
     "statuses": "^2.0.1",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "toidentifier": "^1.0.1",
     "type-is": "^1.6.18",
     "unpipe": "^1.0.0",
@@ -84,10 +86,18 @@
     "winston": "^3.19.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js",
+    "test": "mocha test/adoption.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "mocha": "^11.7.5",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.2.2"
+  }
 }

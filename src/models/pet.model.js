@@ -9,4 +9,4 @@ const petSchema = new mongoose.Schema({
     image: String
 });
 
-export const petModel = mongoose.model('pets', petSchema);
+export const PetModel = mongoose.model('pets', petSchema);

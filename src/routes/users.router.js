@@ -6,6 +6,18 @@ const router = Router();
 const cartDAO = new CartDAO();
 
 
+
+router.get('/', async (req, res) => {
+    try {
+        const users = await UserModel.find();
+        res.send({ status: "success", payload: users });
+    } catch (error) {
+        res.status(500).send({ status: "error", error: error.message });
+    }
+});
+
+
+
 router.post('/register', async (req, res) => {
     const { first_name, last_name, email, age, password } = req.body;
 

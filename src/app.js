@@ -22,6 +22,7 @@ import sessionsRouter from './routes/sessions.router.js';
 import adoptionRouter from './routes/adoption.router.js';
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
+import cors from 'cors';
 
 
 
@@ -40,6 +41,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(join(__dirname, 'public')));
 app.use(cookieParser());
 app.use(addLogger);
+
+app.use(cors());
 
 app.engine('handlebars', engine());
 app.set('view engine', 'handlebars');

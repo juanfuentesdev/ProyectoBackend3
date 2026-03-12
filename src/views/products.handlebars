@@ -1,6 +1,6 @@
 <h1>Productos</h1>
 
-<a href="/carts/68c2501fd2c73a796ab1c1d3" style="display: block; margin-bottom: 20px; font-weight: bold;">
+<a href="/carts/{{user.cart}}" style="display: block; margin-bottom: 20px; font-weight: bold;">
     Ver Mi Carrito
 </a>
 
@@ -10,7 +10,7 @@
             <h3>{{this.title}}</h3>
             <p>Precio: ${{this.price}}</p>
             <a href="/products/{{this._id}}">Ver Detalles</a>
-            <button onclick="addToCart('68c2501fd2c73a796ab1c1d3', '{{this._id}}')">Agregar al Carrito</button>
+            <button onclick="addToCart('{{../user.cart}}', '{{this._id}}')">Agregar al Carrito</button>
         </article>
         <hr>
     {{/each}}
@@ -36,11 +36,22 @@
 
 <script>
     function addToCart(cartId, productId) {
+        // Pequeña validación de seguridad
+        if (!cartId) {
+            alert('No se encontró el carrito. ¿Iniciaste sesión correctamente?');
+            return;
+        }
+
         fetch(`/api/carts/${cartId}/products/${productId}`, {
             method: 'POST',
         })
-        .then(response => response.json())
-        .then(data => alert('Producto agregado al carrito!'))
+        .then(response => {
+            if (response.ok) {
+                alert('¡Producto agregado al carrito exitosamente! 🛒');
+            } else {
+                alert('Error al agregar el producto. Revisa la consola.');
+            }
+        })
         .catch(error => console.error('Error:', error));
     }
 

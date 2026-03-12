@@ -36,6 +36,8 @@ router.post('/:cid/products/:pid',
             const updatedCart = await cartDAO.addProduct(cid, pid);
             res.json({ status: 'success', payload: updatedCart });
         } catch (error) {
+            // 👇 ESTA ES LA LÍNEA MÁGICA QUE NOS DIRÁ QUÉ PASA
+            console.error("🚨🚨🚨 ERROR EXPLOSIVO EN EL CARRITO:", error); 
             res.status(500).json({ status: 'error', error: error.message });
         }
     }

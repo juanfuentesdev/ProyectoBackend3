@@ -8,7 +8,7 @@
         <p><strong>Categoría:</strong> {{product.category}}</p>
         <p><strong>Stock disponible:</strong> {{product.stock}}</p>
         
-        <button onclick="addToCart('68c2501fd2c73a796ab1c1d3', '{{product._id}}')">Agregar al Carrito</button>
+        <button onclick="addToCart('{{user.cart}}', '{{product._id}}')">Agregar al Carrito</button>
     </article>
 {{else}}
     <p>El producto no fue encontrado.</p>
@@ -18,12 +18,18 @@
 
 <script>
     function addToCart(cartId, productId) {
+        // Validación de seguridad por si el usuario no ha iniciado sesión
+        if (!cartId) {
+            alert('Por favor, inicia sesión para agregar productos al carrito.');
+            return;
+        }
+
         fetch(`/api/carts/${cartId}/products/${productId}`, {
             method: 'POST',
         })
         .then(response => {
             if (response.ok) {
-                alert('¡Producto agregado al carrito!');
+                alert('¡Producto agregado al carrito exitosamente! 🛒');
             } else {
                 alert('Error al agregar el producto.');
             }

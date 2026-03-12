@@ -84,9 +84,16 @@ const swaggerOptions = {
     definition: {
         openapi: '3.0.1',
         info: {
-            title: 'Documentación K Tienda / Adoptme',
-            description: 'API principal del proyecto'
-        }
+            title: 'API Adoptme',
+            description: 'Documentación de la API de Adopciones',
+            version: '1.0.0'
+        },
+
+        servers: [
+            { url: 'http://localhost:8080', description: 'Producción' },
+            { url: 'http://localhost:3001', description: 'Desarrollo' },
+            { url: 'http://localhost:3000', description: 'Testing' }
+        ]
     },
     apis: [`./src/docs/**/*.yaml`] 
 };
